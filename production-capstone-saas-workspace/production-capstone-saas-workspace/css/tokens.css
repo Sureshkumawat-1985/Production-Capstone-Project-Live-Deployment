@@ -1,0 +1,36 @@
+/* ==========================================================================
+   Design Tokens & Theme Variables (Mobile-First Architecture)
+   ========================================================================== */
+
+:root {
+  --brand-500: #6366f1;
+  --brand-600: #4f46e5;
+  --brand-700: #4338ca;
+
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+
+  --bg-page: #f1f5f9;
+  --bg-glass: rgba(255, 255, 255, 0.86);
+  --bg-input: #ffffff;
+  --border-color: rgba(15, 23, 42, 0.1);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --shadow-card: 0 10px 28px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="dark"] {
+  --bg-page: #090d16;
+  --bg-glass: rgba(17, 24, 39, 0.84);
+  --bg-input: #1e293b;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.4);
+}

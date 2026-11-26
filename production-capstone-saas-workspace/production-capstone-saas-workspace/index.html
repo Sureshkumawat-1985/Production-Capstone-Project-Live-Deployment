@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TaskFlow Pro — Production SaaS Task Manager & Freelancer Workspace Capstone" />
+  <title>TaskFlow Pro | Production Capstone Workspace</title>
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Toast Feedback -->
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <!-- AUTHENTICATION VIEW (Shown when logged out) -->
+  <section id="authView" class="auth-screen">
+    <div class="auth-card glass-panel">
+      <div class="brand-header">
+        <span class="brand-badge">TF</span>
+        <div>
+          <h1>TaskFlow Pro</h1>
+          <p class="muted-text">Production SaaS Task &amp; Service Portal</p>
+        </div>
+      </div>
+
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab is-active" data-auth-mode="login" role="tab">Sign In</button>
+        <button class="auth-tab" data-auth-mode="register" role="tab">Create Account</button>
+      </div>
+
+      <form id="authForm" class="stack-form">
+        <div id="nameFieldGroup" class="form-group hidden">
+          <label for="authName">Full Name</label>
+          <input type="text" id="authName" class="form-input" placeholder="Aarav Sharma" />
+        </div>
+
+        <div class="form-group">
+          <label for="authEmail">Work Email</label>
+          <input type="email" id="authEmail" class="form-input" placeholder="demo@taskflow.io" required />
+        </div>
+
+        <div class="form-group">
+          <label for="authPassword">Password</label>
+          <input type="password" id="authPassword" class="form-input" placeholder="••••••••" required minlength="4" />
+        </div>
+
+        <p id="authError" class="form-error hidden"></p>
+
+        <button type="submit" id="authSubmitBtn" class="btn btn--primary btn--full">Sign In to Workspace</button>
+      </form>
+
+      <div class="demo-box">
+        <p class="muted-text">Quick Capstone Evaluation Access:</p>
+        <button type="button" id="demoLoginBtn" class="btn btn--secondary btn--full">
+          One-Click Demo Login (Admin Workspace)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN APPLICATION WORKSPACE (Shown when authenticated) -->
+  <div id="appWorkspace" class="app-shell hidden">
+    <!-- Top Bar -->
+    <header class="topbar glass-panel">
+      <div class="topbar__left">
+        <span class="brand-badge">TF</span>
+        <div>
+          <strong class="app-title">TaskFlow Pro</strong>
+          <span class="env-pill">Production v1.0</span>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Workspace Sections">
+        <button class="nav-pill is-active" data-view="boardView">Task Board (CRUD)</button>
+        <button class="nav-pill" data-view="catalogView">Service Catalog</button>
+        <button class="nav-pill" data-view="analyticsView">KPI &amp; Architecture</button>
+      </nav>
+
+      <div class="topbar__right">
+        <button id="themeToggleBtn" class="btn btn--icon" title="Toggle Dark/Light Theme">&#9790;</button>
+        <div class="user-chip">
+          <span id="userAvatar" class="avatar-circle">A</span>
+          <span id="userNameDisplay" class="user-name">Admin</span>
+        </div>
+        <button id="logoutBtn" class="btn btn--danger-ghost">Logout</button>
+      </div>
+    </header>
+
+    <main class="workspace-container">
+      <!-- KPI Summary Strip -->
+      <section class="kpi-strip" aria-label="Workspace Metrics">
+        <article class="kpi-card glass-panel">
+          <span class="kpi-label">Total Tasks</span>
+          <strong id="kpiTotalTasks" class="kpi-value">0</strong>
+        </article>
+        <article class="kpi-card glass-panel">
+          <span class="kpi-label">In Progress</span>
+          <strong id="kpiInProgress" class="kpi-value">0</strong>
+        </article>
+        <article class="kpi-card glass-panel">
+          <span class="kpi-label">Completed</span>
+          <strong id="kpiCompleted" class="kpi-value">0</strong>
+        </article>
+        <article class="kpi-card glass-panel">
+          <span class="kpi-label">Booked Services</span>
+          <strong id="kpiBookedServices" class="kpi-value">0</strong>
+        </article>
+      </section>
+
+      <!-- VIEW 1: DYNAMIC CRUD TASK MANAGER -->
+      <section id="boardView" class="workspace-view">
+        <div class="section-toolbar glass-panel">
+          <div class="toolbar-filters">
+            <input
+              type="search"
+              id="taskSearchInput"
+              class="form-input"
+              placeholder="Search tasks by title or tag..."
+            />
+            <select id="taskStatusFilter" class="form-input">
+              <option value="all">All Statuses</option>
+              <option value="todo">To Do</option>
+              <option value="in-progress">In Progress</option>
+              <option value="done">Completed</option>
+            </select>
+            <select id="taskPriorityFilter" class="form-input">
+              <option value="all">All Priorities</option>
+              <option value="high">High Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="low">Low Priority</option>
+            </select>
+          </div>
+
+          <button id="openCreateTaskBtn" class="btn btn--primary">+ New Task</button>
+        </div>
+
+        <div id="taskGrid" class="cards-grid" aria-live="polite"></div>
+      </section>
+
+      <!-- VIEW 2: INTERACTIVE FREELANCER / SAAS SERVICE CATALOG -->
+      <section id="catalogView" class="workspace-view hidden">
+        <div class="section-toolbar glass-panel">
+          <div>
+            <h2>Interactive Cloud &amp; Freelancer Service Catalog</h2>
+            <p class="muted-text">Book on-demand sprint packages directly into your active task board.</p>
+          </div>
+          <select id="catalogCategoryFilter" class="form-input" style="max-width: 220px;">
+            <option value="all">All Categories</option>
+            <option value="Frontend">Frontend &amp; UI</option>
+            <option value="Backend">Backend &amp; APIs</option>
+            <option value="DevOps">Cloud &amp; Deployment</option>
+          </select>
+        </div>
+
+        <div id="catalogGrid" class="cards-grid"></div>
+      </section>
+
+      <!-- VIEW 3: ARCHITECTURE & DEPLOYMENT CHECKLIST -->
+      <section id="analyticsView" class="workspace-view hidden">
+        <div class="glass-panel" style="padding: 1.5rem;">
+          <h2>Production Capstone Architecture &amp; Data Controls</h2>
+          <p class="muted-text" style="margin-top: 0.35rem;">
+            All authentication sessions, tasks, and booked catalog packages persist locally via <code>localStorage</code> with JSON export/reset controls.
+          </p>
+
+          <div class="arch-actions" style="margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.75rem;">
+            <button id="exportJsonBtn" class="btn btn--secondary">Export Workspace JSON</button>
+            <button id="resetDemoDataBtn" class="btn btn--danger-ghost">Reset Default Seed Data</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL: CREATE / EDIT TASK (CRUD) -->
+  <div id="taskModalBackdrop" class="modal-backdrop hidden">
+    <div class="modal-card glass-panel" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
+      <div class="modal-header">
+        <h3 id="taskModalTitle">Create New Task</h3>
+        <button id="closeTaskModalBtn" class="btn-close" aria-label="Close Modal">&times;</button>
+      </div>
+
+      <form id="taskForm" class="stack-form">
+        <input type="hidden" id="taskIdInput" />
+
+        <div class="form-group">
+          <label for="taskTitleInput">Task Title *</label>
+          <input type="text" id="taskTitleInput" class="form-input" required placeholder="e.g., Configure Vercel CI/CD Pipeline" />
+        </div>
+
+        <div class="form-group">
+          <label for="taskDescInput">Description</label>
+          <textarea id="taskDescInput" class="form-input" rows="3" placeholder="Acceptance criteria & deliverables..."></textarea>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="taskStatusInput">Status</label>
+            <select id="taskStatusInput" class="form-input">
+              <option value="todo">To Do</option>
+              <option value="in-progress">In Progress</option>
+              <option value="done">Completed</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="taskPriorityInput">Priority</label>
+            <select id="taskPriorityInput" class="form-input">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="taskTagInput">Category / Tag</label>
+            <input type="text" id="taskTagInput" class="form-input" placeholder="Frontend, API, DevOps" />
+          </div>
+
+          <div class="form-group">
+            <label for="taskDueInput">Due Date</label>
+            <input type="date" id="taskDueInput" class="form-input" />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="cancelTaskModalBtn" class="btn btn--secondary">Cancel</button>
+          <button type="submit" class="btn btn--primary">Save Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
